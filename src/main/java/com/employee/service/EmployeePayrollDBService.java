@@ -113,4 +113,12 @@ public class EmployeePayrollDBService {
         }
         return 0;
     }
+
+//    UC5
+    public List<EmployeePayrollData> getEmployeePayrollForDateRange(LocalDate startDate, LocalDate endDate) {
+        String sql = String.format("SELECT * FROM employee_payroll WHERE start BETWEEN '%s' AND '%s'",
+                Date.valueOf(startDate), Date.valueOf(endDate));
+
+        return this.getEmployeePayrollData(sql);
+    }
 }
