@@ -5,7 +5,9 @@ import com.employee.entity.EmployeePayrollData;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeePayrollDBService {
  //   UC4: Make class singleton
@@ -121,4 +123,24 @@ public class EmployeePayrollDBService {
 
         return this.getEmployeePayrollData(sql);
     }
+
+//    UC6
+    public Map<String,Double> getEmployeeAverageSalaryByGender() {
+        String sqlQuery= "SELECT gender, AVG(salary) as avg_salary FROM employee_payroll GROUP BY gender;";
+        Map<String,Double> genderToAverageSalaryMap= new HashMap<>();
+        try(Connection connection= this.getConnection()){
+            Statement statement= connection.createStatement();
+            ResultSet resultSet= statement.executeQuery(sqlQuery);
+            while(resultSet.next()){
+                String gender= resultSet.getString("gender");
+                Double salary= resultSet.getDouble("avg_salary");
+                genderToAverageSalaryMap.put(gender,salary);
+            }
+        }
+        catch (SQLException e){
+            throw new RuntimeException();
+        }
+        return genderToAverageSalaryMap;
+    }
 }
+
